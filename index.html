@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <style>
-        /* [1] 기본 레이아웃 설정 */
+        /* [기본 스타일 유지] */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Segoe UI', sans-serif; background-color: #000000; color: #ffffff; 
@@ -17,7 +17,6 @@
             overflow: hidden; border: 1px solid #1a1a1a; position: relative; 
         }
         
-        /* [2] 사이드바 디자인 */
         .sidebar { 
             width: 250px; min-width: 250px; background-color: #050505; padding: 40px 30px; 
             display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; z-index: 10;
@@ -28,32 +27,26 @@
         .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
         .footer-contact { font-size: 0.7rem; color: #555; }
 
-        /* [3] 메인 콘텐츠 영역 */
         .content { flex: 1; padding: 50px; position: relative; overflow-y: auto; height: 100%; }
         
-        /* 탭 애니메이션 */
         .tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 텍스트 스타일 */
         h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
         h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; color: #fff; }
         h3 { font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; color: #ccc; }
         p { color: #bbb; line-height: 1.6; margin-bottom: 10px; }
-
-        /* 프로필 섹션 */
+        
         .profile-section { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin-top: 20px; }
         .profile-img { 
             width: 140px; height: 140px; background-color: #1a1a1a; 
             border-radius: 50%; margin-bottom: 20px; border: 3px solid #333; 
-            /* 프로필 사진 경로 고정 */
             background-image: url('profile.jpg'); 
             background-size: cover; background-position: center;
         }
         .subtitle { font-size: 1.1rem; color: #888; margin-bottom: 30px; }
 
-        /* 소셜 링크 & 툴팁 */
         .social-links { display: flex; gap: 10px; position: relative; }
         .social-links a { 
             color: #fff; text-decoration: none; border: 1px solid #333; 
@@ -68,12 +61,6 @@
         }
         .social-links a:hover::after { opacity: 1; visibility: visible; top: 130%; }
 
-        /* 타임라인 디자인 (Career & Skills) */
-        .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
-        .timeline li { margin-bottom: 25px; position: relative; }
-        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
-
-        /* 갤러리 그리드 */
         .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding-bottom: 20px; }
         .gallery-item { 
             background: #1a1a1a; height: 140px; border-radius: 12px; 
@@ -82,24 +69,29 @@
         }
         .gallery-item:hover { background: #222; border-color: #555; color: #fff; transform: translateY(-3px); }
 
-        /* 모달 (팝업) 스타일 */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content-box { position: relative; text-align: center; max-width: 90%; max-height: 90%; width: 900px; display: flex; flex-direction: column; align-items: center; }
         .modal-img { 
             width: 100%; max-height: 60vh; object-fit: contain; 
             border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.8); 
             border: 1px solid #333; margin-bottom: 15px; background: #000;
+            transition: opacity 0.3s ease-in-out; /* 부드러운 전환 효과 추가 */
         }
         #caption { font-size: 1.5rem; color: #fff; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; }
         .close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; line-height: 1; }
         .close:hover { color: #ff4444; }
-        .fade { animation-name: fade; animation-duration: 0.4s; }
-        @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+        
+        .fade { opacity: 0; }
+        .show { opacity: 1; }
 
-        /* 하단 인디케이터 바 */
         .indicators { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 600px; }
         .bar { flex: 1; height: 4px; background-color: #444; border-radius: 2px; transition: background-color 0.3s ease; }
         .bar.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+
+        .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
+        .timeline li { margin-bottom: 25px; position: relative; }
+        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
+        .tags span { background: #1a1a1a; padding: 5px 12px; border-radius: 5px; margin-right: 5px; font-size: 0.85rem; border: 1px solid #2a2a2a; display: inline-block; }
     </style>
 </head>
 <body>
@@ -174,14 +166,13 @@
     <div id="myModal" class="modal">
         <div class="modal-content-box">
             <span class="close" onclick="closeModal()">&times;</span>
-            <img class="modal-img fade" id="slide-img" src="">
+            <img class="modal-img show" id="slide-img" src="">
             <div id="caption"></div>
             <div class="indicators" id="indicator-container"></div>
         </div>
     </div>
 
     <script>
-        // 사진 이름을 숫자로 바꿨다고 가정하고 경로를 설정합니다.
         const projectData = {
             'project1': { 
                 title: "부산 OK금융그룹 읏맨 배구단 활동", 
@@ -189,7 +180,7 @@
             },
             'project2': { 
                 title: "성남 FC", 
-                images: ["project2/1.jpg", "project2/2.jpg", "project2/3.jpg", "project2/4.jpg", "project2/5.jpg"] 
+                images: ["project2/1.jpg", "project2/2.jpg", "project2/3.jpg", "project2/4.jpg",] 
             },
             'project3': { 
                 title: "FC 서울", 
@@ -204,6 +195,19 @@
         let currentImgIndex = 0;
         let currentProjectKey = '';
         let slideInterval;
+        
+        // ⭐ [핵심 기능] 모든 이미지 미리 다운로드 (Preload) ⭐
+        // 페이지가 열리자마자 브라우저 몰래 사진을 미리 받아옵니다.
+        function preloadImages() {
+            for (const key in projectData) {
+                projectData[key].images.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+            }
+        }
+        // 페이지 로드 시 실행
+        window.onload = preloadImages;
 
         function openTab(tabName) {
             var contents = document.getElementsByClassName("tab-content");
@@ -227,7 +231,11 @@
             createIndicators(projectData[key].images.length);
             
             modal.style.display = "flex";
-            showSlide();
+            
+            // 첫 번째 이미지를 즉시 로드
+            const img = document.getElementById("slide-img");
+            img.src = projectData[key].images[0];
+            updateIndicators(0);
             
             if (slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(nextSlide, 3000);
@@ -257,27 +265,21 @@
         function nextSlide() {
             const images = projectData[currentProjectKey].images;
             currentImgIndex = (currentImgIndex + 1) % images.length;
-            showSlide();
-        }
-
-        function showSlide() {
-            const img = document.getElementById("slide-img");
-            const images = projectData[currentProjectKey].images;
             
-            updateIndicators(currentImgIndex);
+            const img = document.getElementById("slide-img");
+            
+            // ⭐ 부드러운 전환을 위해 불투명도 조절 ⭐
+            img.classList.remove("show"); // 흐리게 만들기
+            
+            // 0.2초 뒤에 이미지 교체하고 다시 선명하게
+            setTimeout(() => {
+                img.src = images[currentImgIndex];
+                img.onload = () => {
+                    img.classList.add("show");
+                };
+            }, 200);
 
-            const downloadingImage = new Image();
-            downloadingImage.onload = function(){
-                img.src = this.src;
-                img.classList.remove("fade");
-                void img.offsetWidth;
-                img.classList.add("fade");
-            };
-            downloadingImage.onerror = function() {
-                // 사진 이름이 1.jpg가 아닐 경우 에러 방지
-                console.log("이미지 로딩 실패: " + this.src);
-            }
-            downloadingImage.src = images[currentImgIndex];
+            updateIndicators(currentImgIndex);
         }
 
         function closeModal() {

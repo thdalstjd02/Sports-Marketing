@@ -22,7 +22,7 @@
             width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1); /* 회전 속도도 살짝 더 우아하게 (1.2s -> 1.5s) */
+            transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1);
         }
 
         .card-object.flipped {
@@ -39,7 +39,7 @@
             border: 1px solid #1a1a1a;
         }
 
-        /* ⭐ [3] 앞면: 인트로 스타일 (시간 조정됨) ⭐ */
+        /* ⭐ [3] 앞면: 인트로 스타일 (시간 조정됨: 2.5s / 3.5s) ⭐ */
         .face.front {
             background-color: #050505;
             display: flex; flex-direction: column;
@@ -47,21 +47,21 @@
             z-index: 2;
         }
 
-        /* 1단계 텍스트: FOR THE FANS (시간 2s -> 3s로 연장) */
+        /* 1단계: FOR THE FANS (2.5초) */
         .intro-msg-1 {
             position: absolute;
             font-size: 2.2rem; font-weight: bold; color: #fff; letter-spacing: 3px;
             opacity: 0;
-            animation: msgSequence1 3s ease-in-out forwards; 
+            animation: msgSequence1 2.5s ease-in-out forwards; 
         }
 
-        /* 2단계 텍스트: SPORTS MARKETER (딜레이 2s -> 2.8s / 지속 1.5s -> 2.5s 연장) */
+        /* 2단계: SPORTS MARKETER (3.5초, 2.5초 딜레이) */
         .intro-msg-2 {
             position: absolute;
             display: flex; flex-direction: column; align-items: center;
             opacity: 0;
-            animation: msgSequence2 2.5s ease-in-out forwards; 
-            animation-delay: 2.8s; /* 첫 번째 텍스트가 사라질 즈음 등장 */
+            animation: msgSequence2 3.5s ease-in-out forwards; 
+            animation-delay: 2.5s; /* 1단계가 끝나는 시점에 시작 */
         }
 
         .intro-main-text {
@@ -80,13 +80,13 @@
         @keyframes msgSequence1 {
             0% { opacity: 0; transform: scale(0.9); }
             20% { opacity: 1; transform: scale(1); }
-            80% { opacity: 1; transform: scale(1); } /* 오랫동안 유지 */
-            100% { opacity: 0; transform: scale(1.1); } /* 천천히 사라짐 */
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.1); } /* 2.5초 시점에 사라짐 */
         }
 
         @keyframes msgSequence2 {
             0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(0); } /* 나타나서 유지 */
         }
         
         @keyframes shine {
@@ -290,7 +290,7 @@
                         <div id="works" class="tab-content">
                             <h2 data-lang-key="works-title">My Works</h2>
                             <div class="gallery">
-                                <div class="gallery-item" onclick="openModal('project1')" data-lang-key="project1-name">부산 OK저축은행 읏맨 프로배구단</div>
+                                <div class="gallery-item" onclick="openModal('project1')" data-lang-key="project1-name">부산 OK저축은행 프로배구단</div>
                                 <div class="gallery-item" onclick="openModal('project2')" data-lang-key="project2-name">성남 FC</div>
                                 <div class="gallery-item" onclick="openModal('project3')" data-lang-key="project3-name">FC 서울</div>
                                 <div class="gallery-item" onclick="openModal('project4')" data-lang-key="project4-name">기획 및 제작</div>
@@ -366,10 +366,10 @@
         window.addEventListener('load', () => {
             preloadAllImages();
             
-            // 2.5s (첫 메시지 끝) + 3.5s (두 번째 메시지 및 대기) = 약 6.0초 후 뒤집힘
+            // 2.5s (첫 메시지) + 3.5s (두 번째 메시지) = 6.0초 뒤에 뒤집힘
             setTimeout(() => {
                 document.getElementById('portfolio-card').classList.add('flipped');
-            }, 5500); 
+            }, 6000); 
         });
 
         let currentLang = 'ko';

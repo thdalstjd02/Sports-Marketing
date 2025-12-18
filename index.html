@@ -12,6 +12,11 @@
             height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; overflow: hidden; 
         }
 
+        /* ⭐ [0] 메인 포인트 컬러: 리치 골드 ⭐ */
+        :root {
+            --accent-color: #D4AF37; 
+        }
+
         /* [2] 3D 오프닝 효과 무대 */
         .scene {
             width: 900px; height: 550px;
@@ -36,38 +41,38 @@
             border-radius: 20px;
             box-shadow: 0 30px 70px rgba(0,0,0, 0.9);
             overflow: hidden;
-            border: 1px solid #1a1a1a;
+            /* 테두리는 각각 설정 */
         }
 
-        /* ⭐ [3] 앞면: 인트로 스타일 (시간 조정됨: 2.5s / 3.5s) ⭐ */
+        /* [3] 앞면: 인트로 (금색 테두리) */
         .face.front {
             background-color: #050505;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             z-index: 2;
+            border: 3px solid var(--accent-color);
         }
 
-        /* 1단계: FOR THE FANS (2.5초) */
         .intro-msg-1 {
             position: absolute;
-            font-size: 2.2rem; font-weight: bold; color: #fff; letter-spacing: 3px;
+            font-size: 2.5rem; font-weight: 900; color: var(--accent-color); letter-spacing: 3px;
             opacity: 0;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
             animation: msgSequence1 2.5s ease-in-out forwards; 
         }
 
-        /* 2단계: SPORTS MARKETER (3.5초, 2.5초 딜레이) */
         .intro-msg-2 {
             position: absolute;
             display: flex; flex-direction: column; align-items: center;
             opacity: 0;
             animation: msgSequence2 3.5s ease-in-out forwards; 
-            animation-delay: 2.5s; /* 1단계가 끝나는 시점에 시작 */
+            animation-delay: 2.5s;
         }
 
         .intro-main-text {
             font-size: 2.5rem; font-weight: 900; letter-spacing: 5px; color: #fff;
             text-transform: uppercase;
-            background: linear-gradient(90deg, #fff, #888, #fff);
+            background: linear-gradient(90deg, #fff, var(--accent-color), #fff);
             background-size: 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -76,17 +81,16 @@
         
         .intro-sub { font-size: 1rem; color: #666; margin-top: 15px; letter-spacing: 2px; }
 
-        /* 애니메이션 키프레임 */
         @keyframes msgSequence1 {
             0% { opacity: 0; transform: scale(0.9); }
             20% { opacity: 1; transform: scale(1); }
             80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.1); } /* 2.5초 시점에 사라짐 */
+            100% { opacity: 0; transform: scale(1.1); }
         }
 
         @keyframes msgSequence2 {
             0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); } /* 나타나서 유지 */
+            100% { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes shine {
@@ -94,14 +98,15 @@
             100% { background-position: 200%; }
         }
 
-        /* ⭐ [4] 뒷면: 메인 컨테이너 ⭐ */
+        /* [4] 뒷면: 메인 컨테이너 (다크 테두리) */
         .face.back {
             transform: rotateY(180deg);
             background-color: #0a0a0a;
             display: flex;
+            border: 1px solid #1a1a1a;
         }
 
-        /* --- 기존 디자인 유지 --- */
+        /* --- 사이드바 --- */
         .sidebar { 
             width: 250px; min-width: 250px; background-color: #050505; padding: 40px 30px; 
             display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; z-index: 10;
@@ -109,22 +114,25 @@
         .sidebar .logo { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; color: #888; margin-bottom: 20px; }
         .sidebar ul { list-style: none; padding: 0; }
         .sidebar ul li { padding: 15px 0; cursor: pointer; color: #888; transition: 0.3s; font-size: 1rem; }
-        .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
+        .sidebar ul li:hover, .sidebar ul li.active-link { 
+            color: var(--accent-color); font-weight: bold; padding-left: 10px; border-left: 3px solid var(--accent-color); 
+        }
         .footer-contact { font-size: 0.7rem; color: #555; }
 
         .lang-switch { display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #666; font-weight: bold; cursor: pointer; }
         .lang-btn { transition: 0.3s; }
-        .lang-btn:hover { color: #fff; }
-        .lang-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+        .lang-btn:hover { color: var(--accent-color); }
+        .lang-btn.active { color: var(--accent-color); text-decoration: underline; text-underline-offset: 4px; }
 
+        /* --- 콘텐츠 --- */
         .content { flex: 1; padding: 50px; position: relative; overflow-y: auto; height: 100%; }
         .tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
-        h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; color: #fff; }
-        h3 { font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; color: #ccc; }
+        h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid var(--accent-color); padding-bottom: 10px; color: #fff; }
+        h3 { font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; color: var(--accent-color); }
         p { color: #bbb; line-height: 1.6; margin-bottom: 10px; }
         
         .profile-section { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin-top: 20px; }
@@ -134,14 +142,14 @@
             background-image: url('profile.jpg'); 
             background-size: cover; background-position: center;
         }
-        .subtitle { font-size: 1.1rem; color: #888; margin-bottom: 30px; }
+        .subtitle { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 30px; font-weight: bold; letter-spacing: 1px; }
 
         .social-links { display: flex; gap: 10px; position: relative; }
         .social-links a { 
             color: #fff; text-decoration: none; border: 1px solid #333; 
             padding: 10px 25px; border-radius: 30px; font-size: 0.9rem; transition: 0.3s; position: relative; 
         }
-        .social-links a:hover { background: #fff; color: #000; }
+        .social-links a:hover { background: var(--accent-color); color: #000; border-color: var(--accent-color); font-weight: bold; }
         .social-links a::after {
             content: attr(data-tooltip); position: absolute; top: 140%; left: 50%; transform: translateX(-50%);
             background-color: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px;
@@ -156,7 +164,7 @@
             display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px;
             cursor: pointer; transition: 0.3s; border: 1px solid #2a2a2a; font-weight: bold; color: #ddd; font-size: 0.95rem;
         }
-        .gallery-item:hover { background: #222; border-color: #555; color: #fff; transform: translateY(-3px); }
+        .gallery-item:hover { background: #222; border-color: var(--accent-color); color: var(--accent-color); transform: translateY(-3px); }
 
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content-box { position: relative; text-align: center; max-width: 90%; max-height: 90%; width: 900px; display: flex; flex-direction: column; align-items: center; }
@@ -168,31 +176,58 @@
         }
         #caption { font-size: 1.5rem; color: #fff; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; }
         .close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; line-height: 1; }
-        .close:hover { color: #ff4444; }
+        .close:hover { color: var(--accent-color); }
         .fade { opacity: 0; }
         .show { opacity: 1; }
 
-        .indicators { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 600px; }
-        .bar { flex: 1; height: 4px; background-color: #444; border-radius: 2px; transition: background-color 0.3s ease; }
-        .bar.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+        /* ⭐ [5] 수정된 슬라이딩 인디케이터 (하나로 이어진 바 + 움직이는 박스) ⭐ */
+        .indicators-track {
+            width: 100%; max-width: 600px;
+            height: 6px;
+            background: #333; /* 어두운 회색 트랙 */
+            border-radius: 10px;
+            position: relative;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .indicator-highlight {
+            height: 100%;
+            background: var(--accent-color); /* 금색 포인트 */
+            border-radius: 10px;
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; /* JS에서 계산됨 */
+            transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1), width 0.4s ease; /* 부드러운 움직임 */
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); /* 빛나는 효과 */
+        }
 
         .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
         .timeline li { margin-bottom: 25px; position: relative; }
-        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
+        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: var(--accent-color); border-radius: 50%; }
+        .timeline-date { color: var(--accent-color); font-weight: bold; font-size: 0.9rem; }
 
         .link-list { display: flex; flex-direction: column; gap: 15px; }
         .link-item {
             display: block; text-decoration: none; background-color: #1a1a1a;
             padding: 20px; border-radius: 12px; border: 1px solid #2a2a2a; transition: 0.3s; color: #fff;
         }
-        .link-item:hover { background-color: #222; border-color: #555; transform: translateX(5px); }
-        .link-title { font-size: 1.1rem; font-weight: bold; color: #fff; margin-bottom: 5px; display: block; }
+        .link-item:hover { background-color: #222; border-color: var(--accent-color); transform: translateX(5px); }
+        .link-item:hover .link-title { color: var(--accent-color); }
+        .link-title { font-size: 1.1rem; font-weight: bold; color: #fff; margin-bottom: 5px; display: block; transition: 0.3s; }
         .link-desc { font-size: 0.85rem; color: #888; }
 
+        /* TO YOU 페이지 스타일 */
         .toyou-box {
-            background-color: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px; border-left: 5px solid #fff; margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px; border-left-width: 5px; border-left-style: solid; margin-bottom: 20px;
         }
-        .toyou-title { font-size: 1.2rem; color: #fff; margin-bottom: 15px; display: block; font-weight: bold; }
+        .toyou-box.step1 { border-left-color: #FFD700; }
+        .toyou-box.step1 .toyou-title { color: #FFD700; }
+        .toyou-box.step2 { border-left-color: #E0E0E0; }
+        .toyou-box.step2 .toyou-title { color: #E0E0E0; }
+        .toyou-box.step3 { border-left-color: #E0A899; }
+        .toyou-box.step3 .toyou-title { color: #E0A899; }
+
+        .toyou-title { font-size: 1.2rem; margin-bottom: 15px; display: block; font-weight: bold; }
         .toyou-text { font-size: 0.95rem; color: #ccc; line-height: 1.7; }
     </style>
 </head>
@@ -203,7 +238,6 @@
                 
                 <div class="face front">
                     <div class="intro-msg-1">FOR THE FANS</div>
-                    
                     <div class="intro-msg-2">
                         <div class="intro-main-text">SPORTS MARKETER</div>
                         <div class="intro-sub">SONG MIN SEONG</div>
@@ -259,28 +293,28 @@
 
                         <div id="career" class="tab-content">
                             <h2 data-lang-key="career-title">Career History</h2>
-                            <div style="margin-bottom: 25px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 5px solid #4CAF50;">
-                                <span style="color: #4CAF50; font-weight: bold;">✔ CURRENT STATUS</span><br>
+                            <div style="margin-bottom: 25px; padding: 15px; background: rgba(212, 175, 55, 0.1); border-radius: 8px; border-left: 5px solid var(--accent-color);">
+                                <span style="color: var(--accent-color); font-weight: bold;">✔ CURRENT STATUS</span><br>
                                 <span style="color: #ddd; font-size: 0.9rem;" data-lang-key="career-current">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
                             </div>
                             <ul class="timeline">
                                 <li>
-                                    <span style="color: #4CAF50; font-weight: bold;">2025.11 - Present</span><br>
+                                    <span class="timeline-date">2025.11 - Present</span><br>
                                     <strong data-lang-key="career1-title">부산 OK저축은행 프로배구단</strong>
                                     <p data-lang-key="career1-desc">현장 운영 STAFF 활동</p>
                                 </li>
                                 <li>
-                                    <span>2025.04 - 2025.08</span><br>
+                                    <span class="timeline-date">2025.04 - 2025.08</span><br>
                                     <strong data-lang-key="career2-title">시사저널 스포츠 산업 실전 프로젝트</strong>
                                     <p data-lang-key="career2-desc">FC서울 1팀 & 성남FC 연계 기획</p>
                                 </li>
                                 <li>
-                                    <span>2024.06 - 2025.01</span><br>
+                                    <span class="timeline-date">2024.06 - 2025.01</span><br>
                                     <strong data-lang-key="career3-title">대학교 스포츠 마케팅 동아리</strong>
                                     <p data-lang-key="career3-desc">콘텐츠 기획 & 영상 및 채널 운영</p>
                                 </li>
                                 <li>
-                                    <span>2026.01(Expected) - </span><br>
+                                    <span class="timeline-date">2026.01(Expected) - </span><br>
                                     <strong data-lang-key="career4-title">부산 KCC 이지스 프로농구단</strong>
                                     <p data-lang-key="career4-desc">현장 운영 STAFF</p>
                                 </li>
@@ -300,7 +334,6 @@
                         <div id="link" class="tab-content">
                             <h2 data-lang-key="link-title">Useful Links</h2>
                             <p style="margin-bottom: 20px; font-size: 0.9rem;" data-lang-key="link-desc">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
-                            
                             <div class="link-list">
                                 <a href="https://spobiz.kspo.or.kr/job/front/index.do" target="_blank" class="link-item">
                                     <span class="link-title" data-lang-key="link1-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
@@ -319,16 +352,14 @@
 
                         <div id="toyou" class="tab-content">
                             <h2 data-lang-key="toyou-main-title">To You</h2>
-                            
-                            <div class="toyou-box" style="border-left-color: #2196F3;">
+                            <div class="toyou-box step1">
                                 <span class="toyou-title" data-lang-key="def-title">스포츠 마케터란?</span>
                                 <p class="toyou-text" data-lang-key="def-text">
                                     경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 
                                     단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.
                                 </p>
                             </div>
-
-                            <div class="toyou-box" style="border-left-color: #fff;">
+                            <div class="toyou-box step2">
                                 <span class="toyou-title" data-lang-key="story-title">왜 스포츠 마케터가 되었나요?</span>
                                 <p class="toyou-text" data-lang-key="story-text">
                                     어릴 적, 경기장에서 느꼈던 그 전율을 잊을 수 없었습니다. 선수들의 땀방울과 팬들의 함성이 하나가 되는 그 순간, 
@@ -336,8 +367,7 @@
                                     스포츠가 주는 에너지를 더 많은 사람들에게 전달하고, 경기장 밖에서도 이어지는 문화를 만들고 싶어 이 길을 선택했습니다.
                                 </p>
                             </div>
-
-                            <div class="toyou-box" style="border-left-color: #4CAF50;">
+                            <div class="toyou-box step3">
                                 <span class="toyou-title" data-lang-key="message-title">같은 길을 걷는 당신에게</span>
                                 <p class="toyou-text" data-lang-key="message-text">
                                     스포츠 산업은 화려해 보이지만, 그 뒤에는 수많은 땀과 노력이 숨어 있습니다. 
@@ -357,16 +387,16 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <img class="modal-img" id="slide-img" src="">
             <div id="caption"></div>
-            <div class="indicators" id="indicator-container"></div>
+            
+            <div class="indicators-track" id="indicator-track">
+                <div class="indicator-highlight" id="indicator-highlight"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ⭐ [6] 자동 실행되는 2단계 오프닝 애니메이션 (시간 연장: 6.0초) ⭐
         window.addEventListener('load', () => {
             preloadAllImages();
-            
-            // 2.5s (첫 메시지) + 3.5s (두 번째 메시지) = 6.0초 뒤에 뒤집힘
             setTimeout(() => {
                 document.getElementById('portfolio-card').classList.add('flipped');
             }, 6000); 
@@ -397,8 +427,6 @@
                 'link1-title': '🔍 스포츠산업 일자리센터 JOBSPOIS', 'link1-desc': '국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보',
                 'link2-title': '📢 스포츠잡알리오 - sportsjobalio', 'link2-desc': '스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티',
                 'link3-title': '🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온', 'link3-desc': '스포츠 기업과 인재를 연결하는 전문 채용 플랫폼',
-                
-                // ⭐ TO YOU (한국어) ⭐
                 'toyou-main-title': 'To You',
                 'def-title': '스포츠 마케터란?',
                 'def-text': '경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.',
@@ -429,8 +457,6 @@
                 'link1-title': '🔍 Sports Industry Job Center JOBSPOIS', 'link1-desc': 'Sports recruitment info operated by KSPO',
                 'link2-title': '📢 Sports Job Alio', 'link2-desc': 'Community for sports jobs & extracurricular activities',
                 'link3-title': '🤝 DraftOn | Sports Recruitment Solution', 'link3-desc': 'Professional platform connecting sports companies & talent',
-                
-                // ⭐ TO YOU (영어) ⭐
                 'toyou-main-title': 'To You',
                 'def-title': 'What is a Sports Marketer?',
                 'def-text': 'A planner who connects fans and players on and off the field, maximizing the value of sports. Beyond simple promotion, we design moments of emotion that fans will never forget and create a culture around them.',
@@ -522,25 +548,19 @@
             slideInterval = setInterval(nextSlide, 3000);
         }
 
+        // ⭐ 슬라이딩 인디케이터 함수 (수정됨) ⭐
         function createIndicators(count) {
-            const container = document.getElementById("indicator-container");
-            container.innerHTML = ""; 
-            for (let i = 0; i < count; i++) {
-                const bar = document.createElement("div");
-                bar.className = "bar";
-                container.appendChild(bar);
-            }
+            const highlight = document.getElementById("indicator-highlight");
+            // 초기 너비 설정 (1/N)
+            highlight.style.width = (100 / count) + "%";
+            highlight.style.left = "0%";
         }
 
         function updateIndicators(index) {
-            const bars = document.getElementsByClassName("bar");
-            for (let i = 0; i < bars.length; i++) {
-                if (i === index) {
-                    bars[i].classList.add("active");
-                } else {
-                    bars[i].classList.remove("active");
-                }
-            }
+            const count = projectData[currentProjectKey].images.length;
+            const highlight = document.getElementById("indicator-highlight");
+            // 현재 위치로 이동
+            highlight.style.left = (index * (100 / count)) + "%";
         }
 
         function nextSlide() {

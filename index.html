@@ -22,7 +22,7 @@
             width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 1.2s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 1.5s cubic-bezier(0.4, 0.2, 0.2, 1); /* 회전 속도도 살짝 더 우아하게 (1.2s -> 1.5s) */
         }
 
         .card-object.flipped {
@@ -39,7 +39,7 @@
             border: 1px solid #1a1a1a;
         }
 
-        /* ⭐ [3] 앞면: 인트로 스타일 (수정됨) ⭐ */
+        /* ⭐ [3] 앞면: 인트로 스타일 (시간 조정됨) ⭐ */
         .face.front {
             background-color: #050505;
             display: flex; flex-direction: column;
@@ -47,21 +47,21 @@
             z-index: 2;
         }
 
-        /* 1단계 텍스트: FOR THE FANS */
+        /* 1단계 텍스트: FOR THE FANS (시간 2s -> 3s로 연장) */
         .intro-msg-1 {
             position: absolute;
             font-size: 2.2rem; font-weight: bold; color: #fff; letter-spacing: 3px;
             opacity: 0;
-            animation: msgSequence1 2s ease-in-out forwards; /* 0초~2초 동안 실행 */
+            animation: msgSequence1 3s ease-in-out forwards; 
         }
 
-        /* 2단계 텍스트: SPORTS MARKETER */
+        /* 2단계 텍스트: SPORTS MARKETER (딜레이 2s -> 2.8s / 지속 1.5s -> 2.5s 연장) */
         .intro-msg-2 {
             position: absolute;
             display: flex; flex-direction: column; align-items: center;
             opacity: 0;
-            animation: msgSequence2 1.5s ease-in-out forwards; /* 2초 뒤에 실행 */
-            animation-delay: 2s;
+            animation: msgSequence2 2.5s ease-in-out forwards; 
+            animation-delay: 2.8s; /* 첫 번째 텍스트가 사라질 즈음 등장 */
         }
 
         .intro-main-text {
@@ -76,17 +76,17 @@
         
         .intro-sub { font-size: 1rem; color: #666; margin-top: 15px; letter-spacing: 2px; }
 
-        /* 애니메이션 키프레임 정의 */
+        /* 애니메이션 키프레임 */
         @keyframes msgSequence1 {
             0% { opacity: 0; transform: scale(0.9); }
-            30% { opacity: 1; transform: scale(1); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.1); } /* 사라짐 */
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); } /* 오랫동안 유지 */
+            100% { opacity: 0; transform: scale(1.1); } /* 천천히 사라짐 */
         }
 
         @keyframes msgSequence2 {
             0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); } /* 나타나서 유지 */
+            100% { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes shine {
@@ -362,14 +362,14 @@
     </div>
 
     <script>
-        // ⭐ [6] 자동 실행되는 2단계 오프닝 애니메이션 ⭐
+        // ⭐ [6] 자동 실행되는 2단계 오프닝 애니메이션 (시간 연장: 6.0초) ⭐
         window.addEventListener('load', () => {
             preloadAllImages();
             
-            // "FOR THE FANS" (2초) + "SPORTS MARKETER" (1.5초) = 총 3.5초 뒤에 뒤집힘
+            // 2.5s (첫 메시지 끝) + 3.5s (두 번째 메시지 및 대기) = 약 6.0초 후 뒤집힘
             setTimeout(() => {
                 document.getElementById('portfolio-card').classList.add('flipped');
-            }, 3500); 
+            }, 5500); 
         });
 
         let currentLang = 'ko';

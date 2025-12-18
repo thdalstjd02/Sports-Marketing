@@ -11,13 +11,69 @@
             font-family: 'Segoe UI', sans-serif; background-color: #000000; color: #ffffff; 
             height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; overflow: hidden; 
         }
-        .card-container { 
-            display: flex; width: 900px; height: 550px; background-color: #0a0a0a; 
-            border-radius: 20px; box-shadow: 0 30px 70px rgba(0,0,0, 0.9); 
-            overflow: hidden; border: 1px solid #1a1a1a; position: relative; 
+
+        /* ⭐ [2] 3D 오프닝 효과를 위한 무대 설정 (수정됨) ⭐ */
+        .scene {
+            width: 900px; height: 550px;
+            perspective: 1500px; /* 3D 원근감 깊이 설정 */
         }
+
+        /* 실제로 회전할 명함 객체 */
+        .card-object {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4, 0.2, 0.2, 1); /* 종이 넘기듯 부드러운 가속도 */
+        }
+
+        /* 명함이 뒤집혔을 때 적용될 클래스 */
+        .card-object.flipped {
+            transform: rotateY(180deg);
+        }
+
+        /* 앞면(인트로)과 뒷면(메인) 공통 설정 */
+        .face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden; /* 뒤집히면 뒷면 숨김 */
+            border-radius: 20px;
+            box-shadow: 0 30px 70px rgba(0,0,0, 0.9);
+            overflow: hidden;
+            border: 1px solid #1a1a1a;
+        }
+
+        /* ⭐ [3] 앞면: 인트로 화면 스타일 ⭐ */
+        .face.front {
+            background-color: #050505;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 2;
+        }
+        /* 인트로 텍스트 스타일 */
+        .intro-text {
+            font-size: 2.5rem; font-weight: 900; letter-spacing: 5px; color: #fff;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, #888, #fff);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+        }
+        .intro-sub { font-size: 1rem; color: #666; margin-top: 15px; letter-spacing: 2px; }
         
-        /* 사이드바 */
+        @keyframes shine {
+            0% { background-position: -200%; }
+            100% { background-position: 200%; }
+        }
+
+        /* ⭐ [4] 뒷면: 기존 메인 컨테이너 (회전된 상태로 시작) ⭐ */
+        .face.back {
+            transform: rotateY(180deg); /* 180도 돌려놓음 */
+            background-color: #0a0a0a;
+            display: flex; /* 기존 card-container 속성 유지 */
+        }
+
+        /* --- 이하 기존 디자인 유지 --- */
         .sidebar { 
             width: 250px; min-width: 250px; background-color: #050505; padding: 40px 30px; 
             display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; z-index: 10;
@@ -28,17 +84,12 @@
         .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
         .footer-contact { font-size: 0.7rem; color: #555; }
 
-        /* 언어 전환 스위치 */
-        .lang-switch {
-            display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #666; font-weight: bold; cursor: pointer;
-        }
+        .lang-switch { display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #666; font-weight: bold; cursor: pointer; }
         .lang-btn { transition: 0.3s; }
         .lang-btn:hover { color: #fff; }
         .lang-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
 
-        /* 메인 콘텐츠 */
         .content { flex: 1; padding: 50px; position: relative; overflow-y: auto; height: 100%; }
-        
         .tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -110,13 +161,8 @@
         .link-title { font-size: 1.1rem; font-weight: bold; color: #fff; margin-bottom: 5px; display: block; }
         .link-desc { font-size: 0.85rem; color: #888; }
 
-        /* ⭐ TO YOU 페이지 전용 스타일 ⭐ */
         .toyou-box {
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid #fff;
-            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px; border-left: 5px solid #fff; margin-bottom: 20px;
         }
         .toyou-title { font-size: 1.2rem; color: #fff; margin-bottom: 15px; display: block; font-weight: bold; }
         .toyou-text { font-size: 0.95rem; color: #ccc; line-height: 1.7; }
@@ -124,146 +170,152 @@
 </head>
 <body>
     <div class="background">
-        <div class="card-container">
-            <nav class="sidebar">
-                <div class="lang-switch">
-                    <span id="btn-ko" class="lang-btn active" onclick="setLanguage('ko')">KR</span> | 
-                    <span id="btn-en" class="lang-btn" onclick="setLanguage('en')">ENG</span>
+        <div class="scene">
+            <div class="card-object" id="portfolio-card">
+                
+                <div class="face front">
+                    <div class="intro-text">SPORTS MARKETER</div>
+                    <div class="intro-sub">SONG MIN SEONG</div>
                 </div>
 
-                <div class="logo">THE SPORTS MARKETING</div>
-                <ul>
-                    <li onclick="openTab('home')" class="active-link" id="link-home">MAIN</li>
-                    <li onclick="openTab('about')" id="link-about">ABOUT</li>
-                    <li onclick="openTab('career')" id="link-career">CAREER</li>
-                    <li onclick="openTab('works')" id="link-works">WORKS</li>
-                    <li onclick="openTab('link')" id="link-link">LINK</li>
-                    <li onclick="openTab('toyou')" id="link-toyou">TO YOU</li>
-                </ul>
-                <div class="footer-contact">© SPORTS MARKETING WEBSITE</div>
-            </nav>
-
-            <main class="content">
-                <div id="home" class="tab-content active">
-                    <div class="profile-section">
-                        <div class="profile-img"></div> 
-                        <h1 data-lang-key="name">송민성</h1>
-                        <p class="subtitle">SPORTS MARKETER</p>
-                        <div class="social-links">
-                            <a href="https://www.google.com/?hl=ko" target="_blank" data-tooltip="vexx045@gmail.com">Email</a>
-                            <a href="#" data-tooltip="010-3654-8574">Phone</a>
-                            <a href="https://www.instagram.com/gidaran_nom/" target="_blank" data-tooltip="@gidaran_nom">Instagram</a>
+                <div class="face back">
+                    <nav class="sidebar">
+                        <div class="lang-switch">
+                            <span id="btn-ko" class="lang-btn active" onclick="setLanguage('ko')">KR</span> | 
+                            <span id="btn-en" class="lang-btn" onclick="setLanguage('en')">ENG</span>
                         </div>
-                    </div>
-                </div>
 
-                <div id="about" class="tab-content">
-                    <h2 data-lang-key="about-title">About Me</h2>
-                    <p data-lang-key="about-desc1">팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.</p>
-                    <p data-lang-key="about-desc2">현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.</p>
-                    <br>
-                    <h3>Skills</h3>
-                    <ul class="timeline">
-                        <li><strong data-lang-key="skill1">스포츠 기획</strong></li>
-                        <li><strong data-lang-key="skill2">콘텐츠 기획</strong></li>
-                        <li><strong data-lang-key="skill3">홍보 전략 기획</strong></li>
-                        <li><strong data-lang-key="skill4">마케팅 기획</strong></li>
-                    </ul>
-                </div>
+                        <div class="logo">THE SPORTS MARKETING</div>
+                        <ul>
+                            <li onclick="openTab('home')" class="active-link" id="link-home">MAIN</li>
+                            <li onclick="openTab('about')" id="link-about">ABOUT</li>
+                            <li onclick="openTab('career')" id="link-career">CAREER</li>
+                            <li onclick="openTab('works')" id="link-works">WORKS</li>
+                            <li onclick="openTab('link')" id="link-link">LINK</li>
+                            <li onclick="openTab('toyou')" id="link-toyou">TO YOU</li>
+                        </ul>
+                        <div class="footer-contact">© SPORTS MARKETING WEBSITE</div>
+                    </nav>
 
-                <div id="career" class="tab-content">
-                    <h2 data-lang-key="career-title">Career History</h2>
-                    <div style="margin-bottom: 25px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 5px solid #4CAF50;">
-                        <span style="color: #4CAF50; font-weight: bold;">✔ CURRENT STATUS</span><br>
-                        <span style="color: #ddd; font-size: 0.9rem;" data-lang-key="career-current">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
-                    </div>
-                    <ul class="timeline">
-                        <li>
-                            <span style="color: #4CAF50; font-weight: bold;">2025.11 - Present</span><br>
-                            <strong data-lang-key="career1-title">부산 OK저축은행 프로배구단</strong>
-                            <p data-lang-key="career1-desc">현장 운영 STAFF 활동</p>
-                        </li>
-                        <li>
-                            <span>2025.04 - 2025.08</span><br>
-                            <strong data-lang-key="career2-title">시사저널 스포츠 산업 실전 프로젝트</strong>
-                            <p data-lang-key="career2-desc">FC서울 1팀 & 성남FC 연계 기획</p>
-                        </li>
-                        <li>
-                            <span>2024.06 - 2025.01</span><br>
-                            <strong data-lang-key="career3-title">대학교 스포츠 마케팅 동아리</strong>
-                            <p data-lang-key="career3-desc">콘텐츠 기획 & 영상 및 채널 운영</p>
-                        </li>
-                        <li>
-                            <span>2026.01(Expected) - </span><br>
-                            <strong data-lang-key="career4-title">부산 KCC 이지스 프로농구단</strong>
-                            <p data-lang-key="career4-desc">현장 운영 STAFF</p>
-                        </li>
-                    </ul>
-                </div>
+                    <main class="content">
+                        <div id="home" class="tab-content active">
+                            <div class="profile-section">
+                                <div class="profile-img"></div> 
+                                <h1 data-lang-key="name">송민성</h1>
+                                <p class="subtitle">SPORTS MARKETER</p>
+                                <div class="social-links">
+                                    <a href="https://www.google.com/?hl=ko" target="_blank" data-tooltip="vexx045@gmail.com">Email</a>
+                                    <a href="#" data-tooltip="010-3654-8574">Phone</a>
+                                    <a href="https://www.instagram.com/gidaran_nom/" target="_blank" data-tooltip="@gidaran_nom">Instagram</a>
+                                </div>
+                            </div>
+                        </div>
 
-                <div id="works" class="tab-content">
-                    <h2 data-lang-key="works-title">My Works</h2>
-                    <div class="gallery">
-                        <div class="gallery-item" onclick="openModal('project1')" data-lang-key="project1-name">부산 OK저축은행 읏맨 프로배구단</div>
-                        <div class="gallery-item" onclick="openModal('project2')" data-lang-key="project2-name">성남 FC</div>
-                        <div class="gallery-item" onclick="openModal('project3')" data-lang-key="project3-name">FC 서울</div>
-                        <div class="gallery-item" onclick="openModal('project4')" data-lang-key="project4-name">기획 및 제작</div>
-                    </div>
-                </div>
+                        <div id="about" class="tab-content">
+                            <h2 data-lang-key="about-title">About Me</h2>
+                            <p data-lang-key="about-desc1">팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.</p>
+                            <p data-lang-key="about-desc2">현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.</p>
+                            <br>
+                            <h3>Skills</h3>
+                            <ul class="timeline">
+                                <li><strong data-lang-key="skill1">스포츠 기획</strong></li>
+                                <li><strong data-lang-key="skill2">콘텐츠 기획</strong></li>
+                                <li><strong data-lang-key="skill3">홍보 전략 기획</strong></li>
+                                <li><strong data-lang-key="skill4">마케팅 기획</strong></li>
+                            </ul>
+                        </div>
 
-                <div id="link" class="tab-content">
-                    <h2 data-lang-key="link-title">Useful Links</h2>
-                    <p style="margin-bottom: 20px; font-size: 0.9rem;" data-lang-key="link-desc">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
-                    
-                    <div class="link-list">
-                        <a href="https://spobiz.kspo.or.kr/job/front/index.do" target="_blank" class="link-item">
-                            <span class="link-title" data-lang-key="link1-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
-                            <span class="link-desc" data-lang-key="link1-desc">국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보</span>
-                        </a>
-                        <a href="https://www.sportsjobalio.com/" target="_blank" class="link-item">
-                            <span class="link-title" data-lang-key="link2-title">📢 스포츠잡알리오 - sportsjobalio</span>
-                            <span class="link-desc" data-lang-key="link2-desc">스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티</span>
-                        </a>
-                        <a href="https://www.drafton.co.kr/" target="_blank" class="link-item">
-                            <span class="link-title" data-lang-key="link3-title">🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온</span>
-                            <span class="link-desc" data-lang-key="link3-desc">스포츠 기업과 인재를 연결하는 전문 채용 플랫폼</span>
-                        </a>
-                    </div>
-                </div>
+                        <div id="career" class="tab-content">
+                            <h2 data-lang-key="career-title">Career History</h2>
+                            <div style="margin-bottom: 25px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 5px solid #4CAF50;">
+                                <span style="color: #4CAF50; font-weight: bold;">✔ CURRENT STATUS</span><br>
+                                <span style="color: #ddd; font-size: 0.9rem;" data-lang-key="career-current">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
+                            </div>
+                            <ul class="timeline">
+                                <li>
+                                    <span style="color: #4CAF50; font-weight: bold;">2025.11 - Present</span><br>
+                                    <strong data-lang-key="career1-title">부산 OK저축은행 프로배구단</strong>
+                                    <p data-lang-key="career1-desc">현장 운영 STAFF 활동</p>
+                                </li>
+                                <li>
+                                    <span>2025.04 - 2025.08</span><br>
+                                    <strong data-lang-key="career2-title">시사저널 스포츠 산업 실전 프로젝트</strong>
+                                    <p data-lang-key="career2-desc">FC서울 1팀 & 성남FC 연계 기획</p>
+                                </li>
+                                <li>
+                                    <span>2024.06 - 2025.01</span><br>
+                                    <strong data-lang-key="career3-title">대학교 스포츠 마케팅 동아리</strong>
+                                    <p data-lang-key="career3-desc">콘텐츠 기획 & 영상 및 채널 운영</p>
+                                </li>
+                                <li>
+                                    <span>2026.01(Expected) - </span><br>
+                                    <strong data-lang-key="career4-title">부산 KCC 이지스 프로농구단</strong>
+                                    <p data-lang-key="career4-desc">현장 운영 STAFF</p>
+                                </li>
+                            </ul>
+                        </div>
 
-                <div id="toyou" class="tab-content">
-                    <h2 data-lang-key="toyou-main-title">To You</h2>
-                    
-                    <div class="toyou-box" style="border-left-color: #2196F3;">
-                        <span class="toyou-title" data-lang-key="def-title">스포츠 마케터란?</span>
-                        <p class="toyou-text" data-lang-key="def-text">
-                            경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 
-                            단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.
-                        </p>
-                    </div>
+                        <div id="works" class="tab-content">
+                            <h2 data-lang-key="works-title">My Works</h2>
+                            <div class="gallery">
+                                <div class="gallery-item" onclick="openModal('project1')" data-lang-key="project1-name">부산 OK저축은행 읏맨 프로배구단</div>
+                                <div class="gallery-item" onclick="openModal('project2')" data-lang-key="project2-name">성남 FC</div>
+                                <div class="gallery-item" onclick="openModal('project3')" data-lang-key="project3-name">FC 서울</div>
+                                <div class="gallery-item" onclick="openModal('project4')" data-lang-key="project4-name">기획 및 제작</div>
+                            </div>
+                        </div>
 
-                    <div class="toyou-box" style="border-left-color: #fff;">
-                        <span class="toyou-title" data-lang-key="story-title">왜 스포츠 마케터가 되었나요?</span>
-                        <p class="toyou-text" data-lang-key="story-text">
-                            어릴 적, 경기장에서 느꼈던 그 전율을 잊을 수 없었습니다. 선수들의 땀방울과 팬들의 함성이 하나가 되는 그 순간, 
-                            저는 단순한 관객이 아닌 그 감동을 만드는 사람이 되고 싶었습니다. 
-                            스포츠가 주는 에너지를 더 많은 사람들에게 전달하고, 경기장 밖에서도 이어지는 문화를 만들고 싶어 이 길을 선택했습니다.
-                        </p>
-                    </div>
+                        <div id="link" class="tab-content">
+                            <h2 data-lang-key="link-title">Useful Links</h2>
+                            <p style="margin-bottom: 20px; font-size: 0.9rem;" data-lang-key="link-desc">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
+                            
+                            <div class="link-list">
+                                <a href="https://spobiz.kspo.or.kr/job/front/index.do" target="_blank" class="link-item">
+                                    <span class="link-title" data-lang-key="link1-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
+                                    <span class="link-desc" data-lang-key="link1-desc">국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보</span>
+                                </a>
+                                <a href="https://www.sportsjobalio.com/" target="_blank" class="link-item">
+                                    <span class="link-title" data-lang-key="link2-title">📢 스포츠잡알리오 - sportsjobalio</span>
+                                    <span class="link-desc" data-lang-key="link2-desc">스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티</span>
+                                </a>
+                                <a href="https://www.drafton.co.kr/" target="_blank" class="link-item">
+                                    <span class="link-title" data-lang-key="link3-title">🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온</span>
+                                    <span class="link-desc" data-lang-key="link3-desc">스포츠 기업과 인재를 연결하는 전문 채용 플랫폼</span>
+                                </a>
+                            </div>
+                        </div>
 
-                    <div class="toyou-box" style="border-left-color: #4CAF50;">
-                        <span class="toyou-title" data-lang-key="message-title">같은 길을 걷는 당신에게</span>
-                        <p class="toyou-text" data-lang-key="message-text">
-                            스포츠 산업은 화려해 보이지만, 그 뒤에는 수많은 땀과 노력이 숨어 있습니다. 
-                            때로는 지치고 힘들 수도 있지만, 우리의 기획 하나가 팬들에게 평생 잊지 못할 추억이 된다는 것을 기억해 주세요. 
-                            열정 하나로 뭉친 우리는 이미 같은 팀입니다. 포기하지 말고 끝까지 함께 달려갔으면 좋겠습니다.
-                        </p>
-                    </div>
-                </div>
+                        <div id="toyou" class="tab-content">
+                            <h2 data-lang-key="toyou-main-title">To You</h2>
+                            
+                            <div class="toyou-box" style="border-left-color: #2196F3;">
+                                <span class="toyou-title" data-lang-key="def-title">스포츠 마케터란?</span>
+                                <p class="toyou-text" data-lang-key="def-text">
+                                    경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 
+                                    단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.
+                                </p>
+                            </div>
 
-            </main>
-        </div>
-    </div>
+                            <div class="toyou-box" style="border-left-color: #fff;">
+                                <span class="toyou-title" data-lang-key="story-title">왜 스포츠 마케터가 되었나요?</span>
+                                <p class="toyou-text" data-lang-key="story-text">
+                                    어릴 적, 경기장에서 느꼈던 그 전율을 잊을 수 없었습니다. 선수들의 땀방울과 팬들의 함성이 하나가 되는 그 순간, 
+                                    저는 단순한 관객이 아닌 그 감동을 만드는 사람이 되고 싶었습니다. 
+                                    스포츠가 주는 에너지를 더 많은 사람들에게 전달하고, 경기장 밖에서도 이어지는 문화를 만들고 싶어 이 길을 선택했습니다.
+                                </p>
+                            </div>
+
+                            <div class="toyou-box" style="border-left-color: #4CAF50;">
+                                <span class="toyou-title" data-lang-key="message-title">같은 길을 걷는 당신에게</span>
+                                <p class="toyou-text" data-lang-key="message-text">
+                                    스포츠 산업은 화려해 보이지만, 그 뒤에는 수많은 땀과 노력이 숨어 있습니다. 
+                                    때로는 지치고 힘들 수도 있지만, 우리의 기획 하나가 팬들에게 평생 잊지 못할 추억이 된다는 것을 기억해 주세요. 
+                                    열정 하나로 뭉친 우리는 이미 같은 팀입니다. 포기하지 말고 끝까지 함께 달려갔으면 좋겠습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </main>
+                </div> </div> </div> </div>
 
     <div id="myModal" class="modal">
         <div class="modal-content-box">
@@ -275,6 +327,17 @@
     </div>
 
     <script>
+        // ⭐ [6] 자동 실행되는 오프닝 애니메이션 ⭐
+        window.addEventListener('load', () => {
+            // 이미지 프리로딩 실행
+            preloadAllImages();
+            
+            // 1.5초 뒤에 카드를 뒤집어서 메인 화면을 보여줌
+            setTimeout(() => {
+                document.getElementById('portfolio-card').classList.add('flipped');
+            }, 1500); 
+        });
+
         let currentLang = 'ko';
 
         const translations = {
@@ -381,7 +444,6 @@
                 });
             }
         }
-        window.onload = preloadAllImages;
 
         function setLanguage(lang) {
             currentLang = lang;

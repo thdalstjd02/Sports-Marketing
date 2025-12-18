@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        /* [1] 기본 레이아웃 설정 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; background-color: #000000; color: #ffffff; 
+            height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; overflow: hidden; 
+        }
+        .card-container { 
+            display: flex; width: 900px; height: 550px; background-color: #0a0a0a; 
+            border-radius: 20px; box-shadow: 0 30px 70px rgba(0,0,0, 0.9); 
+            overflow: hidden; border: 1px solid #1a1a1a; position: relative; 
+        }
+        
+        /* [2] 사이드바 디자인 */
+        .sidebar { 
+            width: 250px; min-width: 250px; background-color: #050505; padding: 40px 30px; 
+            display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; z-index: 10;
+        }
+        .sidebar .logo { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; color: #888; margin-bottom: 40px; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar ul li { padding: 15px 0; cursor: pointer; color: #888; transition: 0.3s; font-size: 1rem; }
+        .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
+        .footer-contact { font-size: 0.7rem; color: #555; }
+
+        /* [3] 메인 콘텐츠 영역 */
+        .content { flex: 1; padding: 50px; position: relative; overflow-y: auto; height: 100%; }
+        
+        /* 탭 애니메이션 */
+        .tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 텍스트 스타일 */
+        h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
+        h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; color: #fff; }
+        h3 { font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; color: #ccc; }
+        p { color: #bbb; line-height: 1.6; margin-bottom: 10px; }
+
+        /* 프로필 섹션 */
+        .profile-section { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin-top: 20px; }
+        .profile-img { 
+            width: 140px; height: 140px; background-color: #1a1a1a; 
+            border-radius: 50%; margin-bottom: 20px; border: 3px solid #333; 
+            /* 프로필 사진 경로 고정 */
+            background-image: url('profile.jpg'); 
+            background-size: cover; background-position: center;
+        }
+        .subtitle { font-size: 1.1rem; color: #888; margin-bottom: 30px; }
+
+        /* 소셜 링크 & 툴팁 */
+        .social-links { display: flex; gap: 10px; position: relative; }
+        .social-links a { 
+            color: #fff; text-decoration: none; border: 1px solid #333; 
+            padding: 10px 25px; border-radius: 30px; font-size: 0.9rem; transition: 0.3s; position: relative; 
+        }
+        .social-links a:hover { background: #fff; color: #000; }
+        .social-links a::after {
+            content: attr(data-tooltip); position: absolute; top: 140%; left: 50%; transform: translateX(-50%);
+            background-color: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px;
+            font-size: 0.9rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: 0.3s;
+            pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0, 0.8); border: 1px solid #444; z-index: 100; font-weight: bold;
+        }
+        .social-links a:hover::after { opacity: 1; visibility: visible; top: 130%; }
+
+        /* 타임라인 디자인 (Career & Skills) */
+        .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
+        .timeline li { margin-bottom: 25px; position: relative; }
+        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
+
+        /* 갤러리 그리드 */
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding-bottom: 20px; }
+        .gallery-item { 
+            background: #1a1a1a; height: 140px; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.3s; border: 1px solid #2a2a2a; font-weight: bold; color: #ddd;
+        }
+        .gallery-item:hover { background: #222; border-color: #555; color: #fff; transform: translateY(-3px); }
+
+        /* 모달 (팝업) 스타일 */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content-box { position: relative; text-align: center; max-width: 90%; max-height: 90%; width: 900px; display: flex; flex-direction: column; align-items: center; }
+        .modal-img { 
+            width: 100%; max-height: 60vh; object-fit: contain; 
+            border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+            border: 1px solid #333; margin-bottom: 15px; background: #000;
+        }
+        #caption { font-size: 1.5rem; color: #fff; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; }
+        .close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close:hover { color: #ff4444; }
+        .fade { animation-name: fade; animation-duration: 0.4s; }
+        @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+
+        /* 하단 인디케이터 바 */
+        .indicators { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 600px; }
+        .bar { flex: 1; height: 4px; background-color: #444; border-radius: 2px; transition: background-color 0.3s ease; }
+        .bar.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="card-container">
+            <nav class="sidebar">
+                <div class="logo">PORTFOLIO</div>
+                <ul>
+                    <li onclick="openTab('home')" class="active-link" id="link-home">MAIN</li>
+                    <li onclick="openTab('about')" id="link-about">ABOUT</li>
+                    <li onclick="openTab('career')" id="link-career">CAREER</li>
+                    <li onclick="openTab('works')" id="link-works">WORKS</li>
+                </ul>
+                <div class="footer-contact">© SPORTS MARKETING WEBSITE</div>
+            </nav>
+
+            <main class="content">
+                <div id="home" class="tab-content active">
+                    <div class="profile-section">
+                        <div class="profile-img"></div> 
+                        <h1>송민성</h1>
+                        <p class="subtitle">Sports Marketing</p>
+                        <div class="social-links">
+                            <a href="#" data-tooltip="vexx045@gmail.com">Email</a>
+                            <a href="#" data-tooltip="010-3654-8574">Phone</a>
+                            <a href="#" data-tooltip="@gidaran_nom">Instagram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="about" class="tab-content">
+                    <h2>About Me</h2>
+                    <p>팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.</p>
+                    <p>현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.</p>
+                    <br>
+                    <h3>Skills</h3>
+                    <ul class="timeline">
+                        <li><strong>스포츠 기획</strong></li>
+                        <li><strong>콘텐츠 기획</strong></li>
+                        <li><strong>홍보 전략 기획</strong></li>
+                        <li><strong>마케팅 기획</strong></li>
+                    </ul>
+                </div>
+
+                <div id="career" class="tab-content">
+                    <h2>Career History</h2>
+                    <div style="margin-bottom: 25px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 5px solid #4CAF50;">
+                        <span style="color: #4CAF50; font-weight: bold;">✔ CURRENT STATUS</span><br>
+                        <span style="color: #ddd; font-size: 0.9rem;">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
+                    </div>
+                    <ul class="timeline">
+                        <li><span style="color: #4CAF50; font-weight: bold;">2025.11 - 현재</span><br><strong>부산 OK읏맨 프로배구단</strong><p>현장 운영 STAFF 활동</p></li>
+                        <li><span>2025.04 - 2025.08</span><br><strong>시사저널 스포츠 산업 실전 프로젝트</strong><p>FC서울 1팀 & 성남FC 연계 기획</p></li>
+                        <li><span>2024.06 - 2025.01</span><br><strong>대학교 스포츠 마케팅 동아리</strong><p>콘텐츠 기획 & 영상 및 채널 운영</p></li>
+                        <li><span>2026.01(예정) - </span><br><strong>부산 KCC 이지스 프로농구단 </strong><p>현장 운영 STAFF</p></li>
+                    </ul>
+                </div>
+
+                <div id="works" class="tab-content">
+                    <h2>My Works</h2>
+                    <div class="gallery">
+                        <div class="gallery-item" onclick="openModal('project1')">부산 OK저축은행 읏맨 프로배구단</div>
+                        <div class="gallery-item" onclick="openModal('project2')">성남 FC</div>
+                        <div class="gallery-item" onclick="openModal('project3')">FC 서울</div>
+                        <div class="gallery-item" onclick="openModal('project4')">기획 및 제작</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content-box">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-img fade" id="slide-img" src="">
+            <div id="caption"></div>
+            <div class="indicators" id="indicator-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // 사진 이름을 숫자로 바꿨다고 가정하고 경로를 설정합니다.
+        const projectData = {
+            'project1': { 
+                title: "부산 OK금융그룹 읏맨 배구단 활동", 
+                images: ["project1/1.jpg", "project1/2.jpg", "project1/3.jpg", "project1/4.jpg", "project1/5.jpg"] 
+            },
+            'project2': { 
+                title: "성남 FC", 
+                images: ["project2/1.jpg", "project2/2.jpg", "project2/3.jpg", "project2/4.jpg", "project2/5.jpg"] 
+            },
+            'project3': { 
+                title: "FC 서울", 
+                images: ["project3/1.jpg", "project3/2.jpg", "project3/3.jpg", "project3/4.jpg", "project3/5.jpg"] 
+            },
+            'project4': { 
+                title: "기획 및 제작", 
+                images: ["project4/1.jpg", "project4/2.jpg", "project4/3.jpg", "project4/4.jpg", "project4/5.jpg"] 
+            }
+        };
+
+        let currentImgIndex = 0;
+        let currentProjectKey = '';
+        let slideInterval;
+
+        function openTab(tabName) {
+            var contents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < contents.length; i++) { contents[i].classList.remove("active"); }
+            var links = document.querySelectorAll("nav ul li");
+            for (var i = 0; i < links.length; i++) { links[i].classList.remove("active-link"); }
+            document.getElementById(tabName).classList.add("active");
+            document.getElementById("link-" + tabName).classList.add("active-link");
+        }
+
+        function openModal(key) {
+            const modal = document.getElementById("myModal");
+            const caption = document.getElementById("caption");
+            
+            if (!projectData[key]) return;
+
+            currentProjectKey = key;
+            currentImgIndex = 0;
+            caption.innerText = projectData[key].title;
+            
+            createIndicators(projectData[key].images.length);
+            
+            modal.style.display = "flex";
+            showSlide();
+            
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 3000);
+        }
+
+        function createIndicators(count) {
+            const container = document.getElementById("indicator-container");
+            container.innerHTML = ""; 
+            for (let i = 0; i < count; i++) {
+                const bar = document.createElement("div");
+                bar.className = "bar";
+                container.appendChild(bar);
+            }
+        }
+
+        function updateIndicators(index) {
+            const bars = document.getElementsByClassName("bar");
+            for (let i = 0; i < bars.length; i++) {
+                if (i === index) {
+                    bars[i].classList.add("active");
+                } else {
+                    bars[i].classList.remove("active");
+                }
+            }
+        }
+
+        function nextSlide() {
+            const images = projectData[currentProjectKey].images;
+            currentImgIndex = (currentImgIndex + 1) % images.length;
+            showSlide();
+        }
+
+        function showSlide() {
+            const img = document.getElementById("slide-img");
+            const images = projectData[currentProjectKey].images;
+            
+            updateIndicators(currentImgIndex);
+
+            const downloadingImage = new Image();
+            downloadingImage.onload = function(){
+                img.src = this.src;
+                img.classList.remove("fade");
+                void img.offsetWidth;
+                img.classList.add("fade");
+            };
+            downloadingImage.onerror = function() {
+                // 사진 이름이 1.jpg가 아닐 경우 에러 방지
+                console.log("이미지 로딩 실패: " + this.src);
+            }
+            downloadingImage.src = images[currentImgIndex];
+        }
+
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
+            clearInterval(slideInterval);
+        }
+
+        window.onclick = function(e) {
+            if (e.target == document.getElementById("myModal")) closeModal();
+        }
+    </script>
+</body>
+</html>

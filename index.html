@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <style>
-        /* [1] 기본 레이아웃 설정 (디자인 고정) */
+        /* [1] 기본 레이아웃 설정 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: 'Segoe UI', sans-serif; background-color: #000000; color: #ffffff; 
@@ -17,51 +17,52 @@
             overflow: hidden; border: 1px solid #1a1a1a; position: relative; 
         }
         
-        /* 사이드바 디자인 */
+        /* 사이드바 */
         .sidebar { 
             width: 250px; min-width: 250px; background-color: #050505; padding: 40px 30px; 
             display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; z-index: 10;
         }
-        .sidebar .logo { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; color: #888; margin-bottom: 40px; }
+        .sidebar .logo { font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; color: #888; margin-bottom: 20px; }
         .sidebar ul { list-style: none; padding: 0; }
         .sidebar ul li { padding: 15px 0; cursor: pointer; color: #888; transition: 0.3s; font-size: 1rem; }
         .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
         .footer-contact { font-size: 0.7rem; color: #555; }
 
-        /* 메인 콘텐츠 영역 */
+        /* ⭐ 언어 전환 스위치 스타일 ⭐ */
+        .lang-switch {
+            display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #666; font-weight: bold; cursor: pointer;
+        }
+        .lang-btn { transition: 0.3s; }
+        .lang-btn:hover { color: #fff; }
+        .lang-btn.active { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+
+        /* 메인 콘텐츠 */
         .content { flex: 1; padding: 50px; position: relative; overflow-y: auto; height: 100%; }
         
-        /* 탭 전환 애니메이션 */
         .tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 텍스트 스타일 */
         h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
         h2 { font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 10px; color: #fff; }
         h3 { font-size: 1.2rem; margin-top: 25px; margin-bottom: 15px; color: #ccc; }
         p { color: #bbb; line-height: 1.6; margin-bottom: 10px; }
-
-        /* 프로필 섹션 */
+        
         .profile-section { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; margin-top: 20px; }
         .profile-img { 
             width: 140px; height: 140px; background-color: #1a1a1a; 
             border-radius: 50%; margin-bottom: 20px; border: 3px solid #333; 
-            /* 프로필 사진 경로 */
             background-image: url('profile.jpg'); 
             background-size: cover; background-position: center;
         }
         .subtitle { font-size: 1.1rem; color: #888; margin-bottom: 30px; }
 
-        /* 소셜 링크 & 툴팁 */
         .social-links { display: flex; gap: 10px; position: relative; }
         .social-links a { 
             color: #fff; text-decoration: none; border: 1px solid #333; 
             padding: 10px 25px; border-radius: 30px; font-size: 0.9rem; transition: 0.3s; position: relative; 
         }
         .social-links a:hover { background: #fff; color: #000; }
-        
-        /* 툴팁 (마우스 올렸을 때 나오는 박스) */
         .social-links a::after {
             content: attr(data-tooltip); position: absolute; top: 140%; left: 50%; transform: translateX(-50%);
             background-color: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px;
@@ -70,21 +71,14 @@
         }
         .social-links a:hover::after { opacity: 1; visibility: visible; top: 130%; }
 
-        /* 타임라인 디자인 (Career & Skills 공통 적용) */
-        .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
-        .timeline li { margin-bottom: 25px; position: relative; }
-        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
-
-        /* 갤러리 그리드 */
         .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding-bottom: 20px; }
         .gallery-item { 
             background: #1a1a1a; height: 140px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.3s; border: 1px solid #2a2a2a; font-weight: bold; color: #ddd;
+            display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px;
+            cursor: pointer; transition: 0.3s; border: 1px solid #2a2a2a; font-weight: bold; color: #ddd; font-size: 0.95rem;
         }
         .gallery-item:hover { background: #222; border-color: #555; color: #fff; transform: translateY(-3px); }
 
-        /* 팝업창 (모달) 스타일 */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
         .modal-content-box { position: relative; text-align: center; max-width: 90%; max-height: 90%; width: 900px; display: flex; flex-direction: column; align-items: center; }
         .modal-img { 
@@ -96,32 +90,23 @@
         #caption { font-size: 1.5rem; color: #fff; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; }
         .close { position: absolute; top: -40px; right: 0; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; line-height: 1; }
         .close:hover { color: #ff4444; }
-        
         .fade { opacity: 0; }
         .show { opacity: 1; }
 
-        /* 하단 인디케이터 바 */
         .indicators { display: flex; gap: 8px; justify-content: center; width: 100%; max-width: 600px; }
         .bar { flex: 1; height: 4px; background-color: #444; border-radius: 2px; transition: background-color 0.3s ease; }
         .bar.active { background-color: #ffffff; box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
 
-        /* LINK 페이지 전용 스타일 */
+        .timeline { list-style: none; border-left: 2px solid #222; padding-left: 20px; }
+        .timeline li { margin-bottom: 25px; position: relative; }
+        .timeline li::before { content: ''; position: absolute; left: -27px; top: 6px; width: 10px; height: 10px; background: #444; border-radius: 50%; }
+
         .link-list { display: flex; flex-direction: column; gap: 15px; }
         .link-item {
-            display: block;
-            text-decoration: none;
-            background-color: #1a1a1a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-            transition: 0.3s;
-            color: #fff;
+            display: block; text-decoration: none; background-color: #1a1a1a;
+            padding: 20px; border-radius: 12px; border: 1px solid #2a2a2a; transition: 0.3s; color: #fff;
         }
-        .link-item:hover {
-            background-color: #222;
-            border-color: #555;
-            transform: translateX(5px);
-        }
+        .link-item:hover { background-color: #222; border-color: #555; transform: translateX(5px); }
         .link-title { font-size: 1.1rem; font-weight: bold; color: #fff; margin-bottom: 5px; display: block; }
         .link-desc { font-size: 0.85rem; color: #888; }
     </style>
@@ -130,6 +115,11 @@
     <div class="background">
         <div class="card-container">
             <nav class="sidebar">
+                <div class="lang-switch">
+                    <span id="btn-ko" class="lang-btn active" onclick="setLanguage('ko')">KR</span> | 
+                    <span id="btn-en" class="lang-btn" onclick="setLanguage('en')">ENG</span>
+                </div>
+
                 <div class="logo">PORTFOLIO</div>
                 <ul>
                     <li onclick="openTab('home')" class="active-link" id="link-home">MAIN</li>
@@ -145,77 +135,89 @@
                 <div id="home" class="tab-content active">
                     <div class="profile-section">
                         <div class="profile-img"></div> 
-                        <h1>송민성</h1>
+                        <h1 data-lang-key="name">송민성</h1>
                         <p class="subtitle">Sports Marketing</p>
-                        
                         <div class="social-links">
                             <a href="https://www.google.com/?hl=ko" target="_blank" data-tooltip="vexx045@gmail.com">Email</a>
-                            
                             <a href="#" data-tooltip="010-3654-8574">Phone</a>
-                            
                             <a href="https://www.instagram.com/gidaran_nom/" target="_blank" data-tooltip="@gidaran_nom">Instagram</a>
                         </div>
                     </div>
                 </div>
 
                 <div id="about" class="tab-content">
-                    <h2>About Me</h2>
-                    <p>팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.</p>
-                    <p>현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.</p>
+                    <h2 data-lang-key="about-title">About Me</h2>
+                    <p data-lang-key="about-desc1">팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.</p>
+                    <p data-lang-key="about-desc2">현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.</p>
                     <br>
                     <h3>Skills</h3>
                     <ul class="timeline">
-                        <li><strong>스포츠 기획</strong></li>
-                        <li><strong>콘텐츠 기획</strong></li>
-                        <li><strong>홍보 전략 기획</strong></li>
-                        <li><strong>마케팅 기획</strong></li>
+                        <li><strong data-lang-key="skill1">스포츠 기획</strong></li>
+                        <li><strong data-lang-key="skill2">콘텐츠 기획</strong></li>
+                        <li><strong data-lang-key="skill3">홍보 전략 기획</strong></li>
+                        <li><strong data-lang-key="skill4">마케팅 기획</strong></li>
                     </ul>
                 </div>
 
                 <div id="career" class="tab-content">
-                    <h2>Career History</h2>
+                    <h2 data-lang-key="career-title">Career History</h2>
                     <div style="margin-bottom: 25px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 8px; border-left: 5px solid #4CAF50;">
                         <span style="color: #4CAF50; font-weight: bold;">✔ CURRENT STATUS</span><br>
-                        <span style="color: #ddd; font-size: 0.9rem;">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
+                        <span style="color: #ddd; font-size: 0.9rem;" data-lang-key="career-current">국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.</span>
                     </div>
                     <ul class="timeline">
-                        <li><span style="color: #4CAF50; font-weight: bold;">2025.11 - 현재</span><br><strong>부산 OK읏맨 프로배구단</strong><p>현장 운영 STAFF 활동</p></li>
-                        <li><span>2025.04 - 2025.08</span><br><strong>시사저널 스포츠 산업 실전 프로젝트</strong><p>FC서울 1팀 & 성남FC 연계 기획</p></li>
-                        <li><span>2024.06 - 2025.01</span><br><strong>대학교 스포츠 마케팅 동아리</strong><p>콘텐츠 기획 & 영상 및 채널 운영</p></li>
-                        <li><span>2026.01(예정) - </span><br><strong>부산 KCC 이지스 프로농구단 </strong><p>현장 운영 STAFF</p></li>
+                        <li>
+                            <span style="color: #4CAF50; font-weight: bold;">2025.11 - Present</span><br>
+                            <strong data-lang-key="career1-title">부산 OK읏맨 프로배구단</strong>
+                            <p data-lang-key="career1-desc">현장 운영 STAFF 활동</p>
+                        </li>
+                        <li>
+                            <span>2025.04 - 2025.08</span><br>
+                            <strong data-lang-key="career2-title">시사저널 스포츠 산업 실전 프로젝트</strong>
+                            <p data-lang-key="career2-desc">FC서울 1팀 & 성남FC 연계 기획</p>
+                        </li>
+                        <li>
+                            <span>2024.06 - 2025.01</span><br>
+                            <strong data-lang-key="career3-title">대학교 스포츠 마케팅 동아리</strong>
+                            <p data-lang-key="career3-desc">콘텐츠 기획 & 영상 및 채널 운영</p>
+                        </li>
+                        <li>
+                            <span>2026.01(Expected) - </span><br>
+                            <strong data-lang-key="career4-title">부산 KCC 이지스 프로농구단</strong>
+                            <p data-lang-key="career4-desc">현장 운영 STAFF</p>
+                        </li>
                     </ul>
                 </div>
 
                 <div id="works" class="tab-content">
-                    <h2>My Works</h2>
+                    <h2 data-lang-key="works-title">My Works</h2>
                     <div class="gallery">
-                        <div class="gallery-item" onclick="openModal('project1')">부산 OK저축은행 읏맨 프로배구단</div>
-                        <div class="gallery-item" onclick="openModal('project2')">성남 FC</div>
-                        <div class="gallery-item" onclick="openModal('project3')">FC 서울</div>
-                        <div class="gallery-item" onclick="openModal('project4')">기획 및 제작</div>
+                        <div class="gallery-item" onclick="openModal('project1')" data-lang-key="project1-name">부산 OK저축은행 읏맨 프로배구단</div>
+                        <div class="gallery-item" onclick="openModal('project2')" data-lang-key="project2-name">성남 FC</div>
+                        <div class="gallery-item" onclick="openModal('project3')" data-lang-key="project3-name">FC 서울</div>
+                        <div class="gallery-item" onclick="openModal('project4')" data-lang-key="project4-name">기획 및 제작</div>
                     </div>
                 </div>
 
                 <div id="link" class="tab-content">
-                    <h2>Useful Links</h2>
-                    <p style="margin-bottom: 20px; font-size: 0.9rem;">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
+                    <h2 data-lang-key="link-title">Useful Links</h2>
+                    <p style="margin-bottom: 20px; font-size: 0.9rem;" data-lang-key="link-desc">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
                     
                     <div class="link-list">
-                        <a href="https://spobiz.kspo.or.kr/job/front/index.do" target="_blank" class="link-item">
-                            <span class="link-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
-                            <span class="link-desc">국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보</span>
+                        <a href="https://spobiz.kspo.or.kr/job/front/main/main.do" target="_blank" class="link-item">
+                            <span class="link-title" data-lang-key="link1-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
+                            <span class="link-desc" data-lang-key="link1-desc">국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보</span>
                         </a>
                         <a href="https://www.sportsjobalio.com/" target="_blank" class="link-item">
-                            <span class="link-title">📢 스포츠잡알리오 - sportsjobalio</span>
-                            <span class="link-desc">스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티</span>
+                            <span class="link-title" data-lang-key="link2-title">📢 스포츠잡알리오 - sportsjobalio</span>
+                            <span class="link-desc" data-lang-key="link2-desc">스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티</span>
                         </a>
                         <a href="https://www.drafton.co.kr/" target="_blank" class="link-item">
-                            <span class="link-title">🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온</span>
-                            <span class="link-desc">스포츠 기업과 인재를 연결하는 전문 채용 플랫폼</span>
+                            <span class="link-title" data-lang-key="link3-title">🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온</span>
+                            <span class="link-desc" data-lang-key="link3-desc">스포츠 기업과 인재를 연결하는 전문 채용 플랫폼</span>
                         </a>
                     </div>
                 </div>
-
             </main>
         </div>
     </div>
@@ -230,21 +232,79 @@
     </div>
 
     <script>
+        // 현재 선택된 언어 (기본값: 한국어)
+        let currentLang = 'ko';
+
+        // ⭐ 다국어 데이터베이스 ⭐
+        const translations = {
+            'ko': {
+                'name': '송민성',
+                'about-title': 'About Me',
+                'about-desc1': '팬들에게 감동을 선물하는 스포츠마케터 송민성입니다.',
+                'about-desc2': '현장의 순간을 추억으로 제작하는 마케터가 되도록 더욱 더 노력하겠습니다.',
+                'skill1': '스포츠 기획', 'skill2': '콘텐츠 기획', 'skill3': '홍보 전략 기획', 'skill4': '마케팅 기획',
+                'career-title': 'Career History',
+                'career-current': '국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.',
+                'career1-title': '부산 OK읏맨 프로배구단', 'career1-desc': '현장 운영 STAFF 활동',
+                'career2-title': '시사저널 스포츠 산업 실전 프로젝트', 'career2-desc': 'FC서울 1팀 & 성남FC 연계 기획',
+                'career3-title': '대학교 스포츠 마케팅 동아리', 'career3-desc': '콘텐츠 기획 & 영상 및 채널 운영',
+                'career4-title': '부산 KCC 이지스 프로농구단', 'career4-desc': '현장 운영 STAFF',
+                'works-title': 'My Works',
+                'project1-name': '부산 OK저축은행 읏맨 프로배구단',
+                'project2-name': '성남 FC',
+                'project3-name': 'FC 서울',
+                'project4-name': '기획 및 제작',
+                'link-title': 'Useful Links',
+                'link-desc': '스포츠 산업 관련 주요 채용 사이트 바로가기',
+                'link1-title': '🔍 스포츠산업 일자리센터 JOBSPOIS', 'link1-desc': '국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보',
+                'link2-title': '📢 스포츠잡알리오 - sportsjobalio', 'link2-desc': '스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티',
+                'link3-title': '🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온', 'link3-desc': '스포츠 기업과 인재를 연결하는 전문 채용 플랫폼'
+            },
+            'en': {
+                'name': 'Song Min-seong',
+                'about-title': 'About Me',
+                'about-desc1': 'My name is Min-seong Song, a sports marketer who gifts emotions to fans.',
+                'about-desc2': 'I strive to become a marketer who turns moments in the field into memories.',
+                'skill1': 'Sports Planning', 'skill2': 'Content Planning', 'skill3': 'PR Strategy', 'skill4': 'Marketing Planning',
+                'career-title': 'Career History',
+                'career-current': 'Currently working as a <strong>Marketing Staff</strong> in the sports field.',
+                'career1-title': 'Busan OK Okman Pro Volleyball Team', 'career1-desc': 'Field Operation Staff',
+                'career2-title': 'Sisa Journal Sports Industry Project', 'career2-desc': 'Planning with FC Seoul & Seongnam FC',
+                'career3-title': 'Univ. Sports Marketing Club', 'career3-desc': 'Content Planning & Channel Operation',
+                'career4-title': 'Busan KCC Egis Pro Basketball Team', 'career4-desc': 'Field Operation Staff',
+                'works-title': 'My Works',
+                'project1-name': 'Busan OK Okman Volleyball Team',
+                'project2-name': 'Seongnam FC',
+                'project3-name': 'FC Seoul',
+                'project4-name': 'Planning & Production',
+                'link-title': 'Useful Links',
+                'link-desc': 'Shortcuts to major sports industry job sites',
+                'link1-title': '🔍 Sports Industry Job Center JOBSPOIS', 'link1-desc': 'Sports recruitment info operated by KSPO',
+                'link2-title': '📢 Sports Job Alio', 'link2-desc': 'Community for sports jobs & extracurricular activities',
+                'link3-title': '🤝 DraftOn | Sports Recruitment Solution', 'link3-desc': 'Professional platform connecting sports companies & talent'
+            }
+        };
+
+        // 프로젝트 데이터 (제목도 다국어 처리)
         const projectData = {
             'project1': { 
-                title: "부산 OK금융그룹 읏맨 배구단 활동", 
+                title_ko: "부산 OK저축은행 읏맨 배구단 활동", 
+                title_en: "Busan OK Okman Volleyball Team Activity",
                 images: ["project1/1.jpg", "project1/2.jpg", "project1/3.jpg", "project1/4.jpg", "project1/5.jpg"] 
             },
             'project2': { 
-                title: "성남 FC", 
+                title_ko: "성남 FC", 
+                title_en: "Seongnam FC",
                 images: ["project2/1.jpg", "project2/2.jpg", "project2/3.jpg", "project2/4.jpg", "project2/5.jpg"] 
             },
             'project3': { 
-                title: "FC 서울", 
+                title_ko: "FC 서울", 
+                title_en: "FC Seoul",
                 images: ["project3/1.jpg", "project3/2.jpg", "project3/3.jpg", "project3/4.jpg", "project3/5.jpg"] 
             },
             'project4': { 
-                title: "기획 및 제작", 
+                title_ko: "기획 및 제작", 
+                title_en: "Planning & Production",
                 images: ["project4/1.jpg", "project4/2.jpg", "project4/3.jpg", "project4/4.jpg", "project4/5.jpg"] 
             }
         };
@@ -252,7 +312,6 @@
         let currentImgIndex = 0;
         let currentProjectKey = '';
         let slideInterval;
-        
         const preloadedImages = [];
         
         function preloadAllImages() {
@@ -265,6 +324,24 @@
             }
         }
         window.onload = preloadAllImages;
+
+        // ⭐ 언어 변경 함수 ⭐
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // 1. 버튼 스타일 변경
+            document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+
+            // 2. 텍스트 내용 변경 (data-lang-key 속성을 가진 모든 요소 찾기)
+            const elements = document.querySelectorAll('[data-lang-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key]; // innerHTML로 태그까지 적용
+                }
+            });
+        }
 
         function openTab(tabName) {
             var contents = document.getElementsByClassName("tab-content");
@@ -283,12 +360,12 @@
 
             currentProjectKey = key;
             currentImgIndex = 0;
-            caption.innerText = projectData[key].title;
+            
+            // ⭐ 모달 제목도 현재 언어에 맞춰서 표시 ⭐
+            caption.innerText = (currentLang === 'ko') ? projectData[key].title_ko : projectData[key].title_en;
             
             createIndicators(projectData[key].images.length);
-            
             modal.style.display = "flex";
-            
             const imgElement = document.getElementById("slide-img");
             imgElement.src = projectData[key].images[0];
             updateIndicators(0);
@@ -327,12 +404,10 @@
         function showSlide() {
             const imgElement = document.getElementById("slide-img");
             const nextSrc = projectData[currentProjectKey].images[currentImgIndex];
-            
             updateIndicators(currentImgIndex);
             
             const loader = new Image();
             loader.src = nextSrc;
-            
             loader.onload = function() {
                 imgElement.src = nextSrc;
                 imgElement.classList.add("show");

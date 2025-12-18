@@ -28,7 +28,7 @@
         .sidebar ul li:hover, .sidebar ul li.active-link { color: #fff; font-weight: bold; padding-left: 10px; border-left: 3px solid #fff; }
         .footer-contact { font-size: 0.7rem; color: #555; }
 
-        /* ⭐ 언어 전환 스위치 스타일 ⭐ */
+        /* 언어 전환 스위치 */
         .lang-switch {
             display: flex; gap: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #666; font-weight: bold; cursor: pointer;
         }
@@ -109,6 +109,17 @@
         .link-item:hover { background-color: #222; border-color: #555; transform: translateX(5px); }
         .link-title { font-size: 1.1rem; font-weight: bold; color: #fff; margin-bottom: 5px; display: block; }
         .link-desc { font-size: 0.85rem; color: #888; }
+
+        /* ⭐ TO YOU 페이지 전용 스타일 ⭐ */
+        .toyou-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #fff;
+            margin-bottom: 20px;
+        }
+        .toyou-title { font-size: 1.2rem; color: #fff; margin-bottom: 15px; display: block; font-weight: bold; }
+        .toyou-text { font-size: 0.95rem; color: #ccc; line-height: 1.7; }
     </style>
 </head>
 <body>
@@ -127,6 +138,7 @@
                     <li onclick="openTab('career')" id="link-career">CAREER</li>
                     <li onclick="openTab('works')" id="link-works">WORKS</li>
                     <li onclick="openTab('link')" id="link-link">LINK</li>
+                    <li onclick="openTab('toyou')" id="link-toyou">TO YOU</li>
                 </ul>
                 <div class="footer-contact">© SPORTS MARKETING WEBSITE</div>
             </nav>
@@ -136,7 +148,7 @@
                     <div class="profile-section">
                         <div class="profile-img"></div> 
                         <h1 data-lang-key="name">송민성</h1>
-                        <p class="subtitle">Sports Marketer</p>
+                        <p class="subtitle">SPORTS MARKETER</p>
                         <div class="social-links">
                             <a href="https://www.google.com/?hl=ko" target="_blank" data-tooltip="vexx045@gmail.com">Email</a>
                             <a href="#" data-tooltip="010-3654-8574">Phone</a>
@@ -168,7 +180,7 @@
                     <ul class="timeline">
                         <li>
                             <span style="color: #4CAF50; font-weight: bold;">2025.11 - Present</span><br>
-                            <strong data-lang-key="career1-title">부산 OK저축은행 읏맨 프로배구단</strong>
+                            <strong data-lang-key="career1-title">부산 OK저축은행 프로배구단</strong>
                             <p data-lang-key="career1-desc">현장 운영 STAFF 활동</p>
                         </li>
                         <li>
@@ -204,7 +216,7 @@
                     <p style="margin-bottom: 20px; font-size: 0.9rem;" data-lang-key="link-desc">스포츠 산업 관련 주요 채용 사이트 바로가기</p>
                     
                     <div class="link-list">
-                        <a href="https://spobiz.kspo.or.kr/job/front/main/main.do" target="_blank" class="link-item">
+                        <a href="https://spobiz.kspo.or.kr/job/front/index.do" target="_blank" class="link-item">
                             <span class="link-title" data-lang-key="link1-title">🔍 스포츠산업 일자리센터 JOBSPOIS</span>
                             <span class="link-desc" data-lang-key="link1-desc">국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보</span>
                         </a>
@@ -218,6 +230,37 @@
                         </a>
                     </div>
                 </div>
+
+                <div id="toyou" class="tab-content">
+                    <h2 data-lang-key="toyou-main-title">To You</h2>
+                    
+                    <div class="toyou-box" style="border-left-color: #2196F3;">
+                        <span class="toyou-title" data-lang-key="def-title">스포츠 마케터란?</span>
+                        <p class="toyou-text" data-lang-key="def-text">
+                            경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 
+                            단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.
+                        </p>
+                    </div>
+
+                    <div class="toyou-box" style="border-left-color: #fff;">
+                        <span class="toyou-title" data-lang-key="story-title">왜 스포츠 마케터가 되었나요?</span>
+                        <p class="toyou-text" data-lang-key="story-text">
+                            어릴 적, 경기장에서 느꼈던 그 전율을 잊을 수 없었습니다. 선수들의 땀방울과 팬들의 함성이 하나가 되는 그 순간, 
+                            저는 단순한 관객이 아닌 그 감동을 만드는 사람이 되고 싶었습니다. 
+                            스포츠가 주는 에너지를 더 많은 사람들에게 전달하고, 경기장 밖에서도 이어지는 문화를 만들고 싶어 이 길을 선택했습니다.
+                        </p>
+                    </div>
+
+                    <div class="toyou-box" style="border-left-color: #4CAF50;">
+                        <span class="toyou-title" data-lang-key="message-title">같은 길을 걷는 당신에게</span>
+                        <p class="toyou-text" data-lang-key="message-text">
+                            스포츠 산업은 화려해 보이지만, 그 뒤에는 수많은 땀과 노력이 숨어 있습니다. 
+                            때로는 지치고 힘들 수도 있지만, 우리의 기획 하나가 팬들에게 평생 잊지 못할 추억이 된다는 것을 기억해 주세요. 
+                            열정 하나로 뭉친 우리는 이미 같은 팀입니다. 포기하지 말고 끝까지 함께 달려갔으면 좋겠습니다.
+                        </p>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
@@ -232,10 +275,8 @@
     </div>
 
     <script>
-        // 현재 선택된 언어 (기본값: 한국어)
         let currentLang = 'ko';
 
-        // ⭐ 다국어 데이터베이스 ⭐
         const translations = {
             'ko': {
                 'name': '송민성',
@@ -245,12 +286,12 @@
                 'skill1': '스포츠 기획', 'skill2': '콘텐츠 기획', 'skill3': '홍보 전략 기획', 'skill4': '마케팅 기획',
                 'career-title': 'Career History',
                 'career-current': '국내 스포츠 현장에서 <strong>마케팅 스태프</strong>로 활동 중입니다.',
-                'career1-title': '부산 OK저축은행 읏맨 프로배구단', 'career1-desc': '현장 운영 STAFF 활동',
+                'career1-title': '부산 OK저축은행 프로배구단', 'career1-desc': '현장 운영 STAFF 활동',
                 'career2-title': '시사저널 스포츠 산업 실전 프로젝트', 'career2-desc': 'FC서울 1팀 & 성남FC 연계 기획',
                 'career3-title': '대학교 스포츠 마케팅 동아리', 'career3-desc': '콘텐츠 기획 & 영상 및 채널 운영',
                 'career4-title': '부산 KCC 이지스 프로농구단', 'career4-desc': '현장 운영 STAFF',
                 'works-title': 'My Works',
-                'project1-name': '부산 OK저축은행 읏맨 프로배구단',
+                'project1-name': '부산 OK저축은행 프로배구단',
                 'project2-name': '성남 FC',
                 'project3-name': 'FC 서울',
                 'project4-name': '기획 및 제작',
@@ -258,7 +299,16 @@
                 'link-desc': '스포츠 산업 관련 주요 채용 사이트 바로가기',
                 'link1-title': '🔍 스포츠산업 일자리센터 JOBSPOIS', 'link1-desc': '국민체육진흥공단(KSPO) 운영 스포츠 분야 채용 정보',
                 'link2-title': '📢 스포츠잡알리오 - sportsjobalio', 'link2-desc': '스포츠 산업 취업, 대외활동, 공모전 정보 공유 커뮤니티',
-                'link3-title': '🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온', 'link3-desc': '스포츠 기업과 인재를 연결하는 전문 채용 플랫폼'
+                'link3-title': '🤝 국내 최초 스포츠 채용 솔루션 | 드래프트온', 'link3-desc': '스포츠 기업과 인재를 연결하는 전문 채용 플랫폼',
+                
+                // ⭐ TO YOU (한국어) ⭐
+                'toyou-main-title': 'To You',
+                'def-title': '스포츠 마케터란?',
+                'def-text': '경기장 안팎에서 팬들과 선수를 연결하고, 스포츠의 가치를 극대화하는 기획자입니다. 단순한 홍보를 넘어, 팬들에게 잊지 못할 감동의 순간을 디자인하고 문화를 만들어가는 사람입니다.',
+                'story-title': '왜 스포츠 마케터가 되었나요?',
+                'story-text': '어릴 적, 경기장에서 느꼈던 그 전율을 잊을 수 없었습니다. 선수들의 땀방울과 팬들의 함성이 하나가 되는 그 순간, 저는 단순한 관객이 아닌 그 감동을 만드는 사람이 되고 싶었습니다. 스포츠가 주는 에너지를 더 많은 사람들에게 전달하고, 경기장 밖에서도 이어지는 문화를 만들고 싶어 이 길을 선택했습니다.',
+                'message-title': '같은 길을 걷는 당신에게',
+                'message-text': '스포츠 산업은 화려해 보이지만, 그 뒤에는 수많은 땀과 노력이 숨어 있습니다. 때로는 지치고 힘들 수도 있지만, 우리의 기획 하나가 팬들에게 평생 잊지 못할 추억이 된다는 것을 기억해 주세요. 열정 하나로 뭉친 우리는 이미 같은 팀입니다. 포기하지 말고 끝까지 함께 달려갔으면 좋겠습니다.'
             },
             'en': {
                 'name': 'Min-seong Song',
@@ -273,7 +323,7 @@
                 'career3-title': 'Univ. Sports Marketing Club', 'career3-desc': 'Content Planning & Channel Operation',
                 'career4-title': 'Busan KCC Egis Pro Basketball Team', 'career4-desc': 'Field Operation Staff',
                 'works-title': 'My Works',
-                'project1-name': 'Busan OK Savings Bank Volleyball Team',
+                'project1-name': 'Busan OK Savings Bank Pro Volleyball Team',
                 'project2-name': 'Seongnam FC',
                 'project3-name': 'FC Seoul',
                 'project4-name': 'Planning & Production',
@@ -281,15 +331,23 @@
                 'link-desc': 'Shortcuts to major sports industry job sites',
                 'link1-title': '🔍 Sports Industry Job Center JOBSPOIS', 'link1-desc': 'Sports recruitment info operated by KSPO',
                 'link2-title': '📢 Sports Job Alio', 'link2-desc': 'Community for sports jobs & extracurricular activities',
-                'link3-title': '🤝 DraftOn | Sports Recruitment Solution', 'link3-desc': 'Professional platform connecting sports companies & talent'
+                'link3-title': '🤝 DraftOn | Sports Recruitment Solution', 'link3-desc': 'Professional platform connecting sports companies & talent',
+                
+                // ⭐ TO YOU (영어) ⭐
+                'toyou-main-title': 'To You',
+                'def-title': 'What is a Sports Marketer?',
+                'def-text': 'A planner who connects fans and players on and off the field, maximizing the value of sports. Beyond simple promotion, we design moments of emotion that fans will never forget and create a culture around them.',
+                'story-title': 'Why I became a Sports Marketer?',
+                'story-text': 'I could never forget the thrill I felt at the stadium as a child. The moment the players\' sweat and the fans\' cheers became one, I wanted to be the creator of that emotion, not just a spectator. I chose this path to deliver the energy of sports to more people and create a culture that continues even outside the stadium.',
+                'message-title': 'To You, Walking the Same Path',
+                'message-text': 'The sports industry looks glamorous, but there is a lot of sweat and effort hidden behind it. It may be exhausting at times, but please remember that a single plan of ours becomes an unforgettable memory for fans. We, united by passion, are already on the same team. Don\'t give up, let\'s run together until the end.'
             }
         };
 
-        // 프로젝트 데이터 (제목도 다국어 처리)
         const projectData = {
             'project1': { 
-                title_ko: "부산 OK저축은행 읏맨 배구단 활동", 
-                title_en: "Busan OK Okman Volleyball Team Activity",
+                title_ko: "부산 OK저축은행 프로배구단 ", 
+                title_en: "Busan OK Savings bank Volleyball Team",
                 images: ["project1/1.jpg", "project1/2.jpg", "project1/3.jpg", "project1/4.jpg", "project1/5.jpg"] 
             },
             'project2': { 
@@ -325,20 +383,16 @@
         }
         window.onload = preloadAllImages;
 
-        // ⭐ 언어 변경 함수 ⭐
         function setLanguage(lang) {
             currentLang = lang;
-            
-            // 1. 버튼 스타일 변경
             document.getElementById('btn-ko').classList.toggle('active', lang === 'ko');
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
 
-            // 2. 텍스트 내용 변경 (data-lang-key 속성을 가진 모든 요소 찾기)
             const elements = document.querySelectorAll('[data-lang-key]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-lang-key');
                 if (translations[lang][key]) {
-                    el.innerHTML = translations[lang][key]; // innerHTML로 태그까지 적용
+                    el.innerHTML = translations[lang][key];
                 }
             });
         }
@@ -360,8 +414,6 @@
 
             currentProjectKey = key;
             currentImgIndex = 0;
-            
-            // ⭐ 모달 제목도 현재 언어에 맞춰서 표시 ⭐
             caption.innerText = (currentLang === 'ko') ? projectData[key].title_ko : projectData[key].title_en;
             
             createIndicators(projectData[key].images.length);
